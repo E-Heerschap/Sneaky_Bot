@@ -1,7 +1,7 @@
 package main
 
 type Settings struct {
+	//Token of bot to login
 	BotToken string `json:"Bot Token"`
-	RssList []string `json:"RSS Feeds"`
 	RssRefresh int `json:"RSS Timer"`
 }

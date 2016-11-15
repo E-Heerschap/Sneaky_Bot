@@ -1,10 +1,8 @@
 package main;
 import (
-	"github.com/kingpulse/sneaky_bot/utils"
 	"os"
 	"bytes"
 	"encoding/json"
-	"github.com/mmcdole/gofeed"
 	"fmt"
 	"github.com/bwmarrin/discordgo"
 
@@ -88,7 +86,6 @@ func loadSettings(settings *Settings)(settingsExist bool){
 		}
 
 		s := &Settings{
-			RssList: []string{""},
 			RssRefresh: 60,
 			BotToken: "",
 		};
@@ -120,43 +117,3 @@ func loadSettings(settings *Settings)(settingsExist bool){
 
 
 
-func printNews(s *discordgo.Session){
-	fp := gofeed.NewParser();
-
-	messages, err := s.ChannelMessages("231397628565258240", 100 ,"9223372036854775807", "0");
-
-	if (err != nil){
-		fmt.Println("Could not get channel messages", err);
-	}
-	fmt.Println(len(messages));
-	foundFlag := false;
-
-
-	feed, _ := fp.ParseURL("http://feeds.thescoreesports.com/csgo.rss");
-	for i := 0; i < len(feed.Items); i++{
-		for n := 0; n < len(messages); n++{
-			if(messages[n].Content == feed.Items[i].Link){
-
-				foundFlag = true;
-			}
-		}
-		if(!foundFlag){
-			utils.MessageCreate(discordPtr, feed.Items[i].Link, "3");
-		}
-		foundFlag = false;
-	}
-
-	feed, _ = fp.ParseURL("http://feeds.thescoreesports.com/lol.rss");
-	for i := 0; i < len(feed.Items); i++{
-		for n := 0; n < len(messages); n++{
-			if(messages[n].Content == feed.Items[i].Link){
-
-				foundFlag = true;
-			}
-		}
-		if(!foundFlag){
-			utils.MessageCreate(discordPtr, feed.Items[i].Link,"3");
-		}
-		foundFlag = false;
-	}
-}
