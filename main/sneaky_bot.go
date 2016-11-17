@@ -7,6 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 
 	"io/ioutil"
+	"github.com/kingpulse/sneaky_bot/commands"
 );
 
 /*
@@ -28,12 +29,11 @@ func main(){
 	}
 
 	//Creating new Discord session.
-	//TODO Change bot token to be included in the sbSettings.JSON
 	fmt.Println("Creating session...");
 	var buffer bytes.Buffer;
 	buffer.WriteString("Bot ");
 	buffer.WriteString(sbSettings.BotToken);
-	discord, err := discordgo.New("Bot ");
+	discord, err := discordgo.New(buffer.String());
 	discordPtr = discord;
 
 	//Checking for errors creating Discord session
@@ -48,6 +48,11 @@ func main(){
 		return;
 	}
 
+	c := commands.NewManager(discordPtr)
+
+	//Setting up discord message listener
+	discord.AddHandler(c.OnCommandCall)
+
 	//Opening discord connection.
 	err = discord.Open()
 	if err != nil {
@@ -55,8 +60,10 @@ func main(){
 		return
 	}
 
+
 	fmt.Println("Sneaky Bot has started successfully.")
 
+	<-make(chan struct{})
 }
 
 //Handles the loading of settings from Settings.JSON contained in the same directory as the executable.
