@@ -20,6 +20,7 @@ func addPostedMessage(rssChannel *RssChannel, message string){
 
 }
 
+/*
 func checkRssFeeds(s *discordgo.Session, channelID string){
 	fp := gofeed.NewParser();
 
@@ -57,3 +58,4 @@ func checkRssFeeds(s *discordgo.Session, channelID string){
 		foundFlag = false;
 	}
 }
+*/
