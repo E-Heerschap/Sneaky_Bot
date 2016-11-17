@@ -17,12 +17,16 @@ var(
 	BotID string
 )
 
-func initializeCommands(dg *discordgo.Session){
+func InitializeCommands(dg *discordgo.Session){
+	commandsMap = make(map[string]func(params []string, m discordgo.MessageCreate))
 	commandsMap["ping"] = ping
 	commandsMap["dice"] = dice
 	commandsMap["addrss"] = addRss
-	var err string
-	BotID, err = dg.User("@me")
+	commandsMap["removerss"] = removeRss
+
+	bot, err := dg.User("@me")
+
+	BotID = bot.ID
 
 	if err != nil {
 		fmt.Print("Error: failed to get Bot ID. Official error: ", err)
@@ -42,11 +46,12 @@ func OnCommandCall(discordSession *discordgo.Session, messageCreate *discordgo.M
 		msg := strings.ToLower(messageCreate.Content)
 
 		tokens := strings.Split(msg[2:], " ")
-
+		fmt.Print(strings.Compare(tokens[0], "ping"))
+		fmt.Println(tokens[0])
 		//This calls the appropriate command if one is found.
 		cmd, ok := commandsMap[tokens[0]]
 		if ok {
-			go cmd(tokens)
+			go cmd(tokens, *messageCreate)
 		}else {
 			go utils.MessageCreate(discordSession, "Sorry that command doesn't exist.", messageCreate.ChannelID)
 		}
@@ -63,7 +68,7 @@ Functions for commands are below
 
 //Ping sends a message back displaying the ping to the bot
 func ping(params []string, m discordgo.MessageCreate) {
-
+	fmt.Print(m.Timestamp)
 }
 
 //Dice allows the user to roll a virtual dice of a given size.
