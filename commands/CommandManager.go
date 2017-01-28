@@ -86,7 +86,7 @@ func (c *CommandsManager) OnCommandCall(discordSession *discordgo.Session, messa
 
 		//Formatting string for use
 		msg := strings.ToLower(messageCreate.Content)
-
+		
 		tokens := strings.Split(msg[2:], " ")
 
 		//This calls the appropriate command if one is found.
@@ -130,11 +130,12 @@ func (c *CommandsManager) dice(params []string, m discordgo.MessageCreate){
 	if len(params) < 2 {
 		//User has not entered a number for the dice roll.
 		go utils.MessageCreate(c.discordPtr, "Enter a number for the roll. Example: //Dice 6", m.ChannelID)
+		return
 	}
 
 	//Generating random number based on given number
 	diceNo, err := strconv.Atoi(params[1])
-	if err != nil && diceNo > 0 {
+	if err != nil {
 		go utils.MessageCreate(c.discordPtr, "Sorry you did not enter a valid number.", m.ChannelID)
 		return
 	}
