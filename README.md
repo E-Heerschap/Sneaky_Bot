@@ -1,6 +1,6 @@
 # Sneaky_Bot
 
-Work on this project will carry on once Go-Runescape API is completed.
+
 
 ## What is Sneaky_Bot
 
